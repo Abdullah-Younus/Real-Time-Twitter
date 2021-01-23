@@ -60,6 +60,21 @@
 
         }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".showHideDiv").click(function () {
+                var clickedBtnId = $(this).attr('id');
+                if (clickedBtnId === 'home') {
+                    $('#home_div').show();
+                    $('#profile_div').hide();
+                } else if (clickedBtnId === 'profile') {
+                    $('#home_div').hide();
+                    $('#profile_div').show();
+                }
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -105,19 +120,34 @@
     <section>
         <div class="container-fluid">
             <div class="row" style="border: 1px solid black;">
-                <div class="col-3" style="border: 1px solid blue;">
+                <div class="col-3" style="border: 1px solid blue;" class="btnsContainer">
                     <br>
-                   <center><button type="button" class="btn btn-outline-success">Home</button>
-                    <br>
-                    <br>
-                    <br>
-                    <button type="button" class="btn btn-outline-success">Profile</button></center>
-
+                    <center><button class="showHideDiv btn btn-outline-success" id="home">Home</button>
+                        <br>
+                        <br>
+                        <br>
+                        <button class="showHideDiv btn btn-outline-success" id="profile">Profile</button>
+                    </center>
                 </div>
-
+                <div class="col-9" style="border: 2px solid springgreen;display: inline;">
+                    <div id="home_div" class="role" name="home">
+                        <!--Your Home script here-->
+                        <ol>
+                            <li>Home</li>
+                        </ol>
+                        
+                    </div>
+                    <div id="profile_div" class="role" name="profile" style="display:none;">
+                        <!--Your PRofile script here-->
+                        <ol> 
+                            <li>PROFILE</li>
+                        </ol>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
+
 
 </body>
 

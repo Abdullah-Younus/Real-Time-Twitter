@@ -52,7 +52,10 @@ var otpModel = mongoose.model("opt", otpSchema)
 
 var tweetSchema = new mongoose.Schema({
     "username": String,
-    "tweet": String
+    "tweet": String,
+    "profilePic": String,
+    "tweetImg": String,
+    "createdOn": { "type": Date, "default": Date.now }
 });
 
 var tweetModel = mongoose.model("tweet", tweetSchema);
