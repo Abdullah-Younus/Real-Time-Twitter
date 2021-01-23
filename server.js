@@ -23,25 +23,25 @@ var app = express();
 
 var server = http.createServer(app);
 
-const storage = multer.diskStorage({ // https://www.npmjs.com/package/multer#diskstorage
-    destination: './uploads/',
-    filename: function (req, file, cb) {
-        cb(null, `${new Date().getTime()}-${file.filename}.${file.mimetype.split("/")[1]}`)
-    }
-})
-var upload = multer({ storage: storage })
+// const storage = multer.diskStorage({ // https://www.npmjs.com/package/multer#diskstorage
+//     destination: './uploads/',
+//     filename: function (req, file, cb) {
+//         cb(null, `${new Date().getTime()}-${file.filename}.${file.mimetype.split("/")[1]}`)
+//     }
+// })
+// var upload = multer({ storage: storage })
 
 
 
-// // https://firebase.google.com/docs/storage/admin/start
-var serviceAccount = JSON.parse(process.env.serviceAccount);
+// // // https://firebase.google.com/docs/storage/admin/start
+// var serviceAccount = JSON.parse(process.env.serviceAccount);
 
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: process.env.databaseURL
-});
-const bucket = admin.storage().bucket(process.env.bucket);
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+//     databaseURL: process.env.databaseURL
+// });
+// const bucket = admin.storage().bucket(process.env.bucket);
 
 // //==============================================
 
@@ -101,7 +101,8 @@ app.use(function (req, res, next) {
                     name: decodedData.name,
                     email: decodedData.email,
                     phone: decodedData.phone,
-                    gender: decodedData.gender
+                    gender: decodedData.gender,
+                    profilePic: decodedData.profilePic
                 }, SERVER_SECRET)
 
                 res.cookie('jToken', token, {
@@ -143,6 +144,7 @@ app.get("/profile", (req, res, next) => {
 })
 
 app.post("/tweet", (req, res, next) => {
+    console.log("is token ma check karna han kia han", req.body.jToken.profilePic);
     if (!req.body.jToken.id || !req.body.tweet) {
         res.send({
             status: 401,
@@ -160,14 +162,15 @@ app.post("/tweet", (req, res, next) => {
                         message: "Tweet DB ERROR",
                         status: 404
                     });
-                }
+                } 
                 else if (data) {
                     res.send({
                         status: 200,
                         message: "Your Tweet Send",
-                        data: data
+                        data: data + user.profilePic,
                     });
                     io.emit("NEW_POST", data);
+                    // console.log("ya be check karna han kesay ae han acha yaha concatenate kara han:", data)
                 } else {
                     res.send({
                         message: "Tweets posting error try again later",
@@ -203,79 +206,79 @@ app.get("/tweet-get", (req, res, next) => {
 });
 
 
-app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.single. see https://github.com/expressjs/multer/issues/799#issuecomment-586526877
+// app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.single. see https://github.com/expressjs/multer/issues/799#issuecomment-586526877
 
-    console.log("req.body: ", req.body);
-    console.log("req.body: ", JSON.parse(req.body.myDetails));
-    console.log("req.files: ", req.files);
+//     console.log("req.body: ", req.body);
+//     console.log("req.body: ", JSON.parse(req.body.myDetails));
+//     console.log("req.files: ", req.files);
 
-    console.log("uploaded file name: ", req.files[0].originalname);
-    console.log("file type: ", req.files[0].mimetype);
-    console.log("file name in server folders: ", req.files[0].filename);
-    console.log("file path in server folders: ", req.files[0].path);
+//     console.log("uploaded file name: ", req.files[0].originalname);
+//     console.log("file type: ", req.files[0].mimetype);
+//     console.log("file name in server folders: ", req.files[0].filename);
+//     console.log("file path in server folders: ", req.files[0].path);
 
-    // upload file to storage bucket 
-    // you must need to upload file in a storage bucket or somewhere safe
-    // server folder is not safe, since most of the time when you deploy your server
-    // on cloud it makes more t2han one instances, if you use server folder to save files
-    // two things will happen, 
-    // 1) your server will no more stateless
-    // 2) providers like heroku delete all files when dyno restarts (their could be lots of reasons for your dyno to restart, or it could restart for no reason so be careful) 
-
-
-    // https://googleapis.dev/nodejs/storage/latest/Bucket.html#upload-examples
-    bucket.upload(
-        req.files[0].path,
-        // {
-        //     destination: `${new Date().getTime()}-new-image.png`, // give destination name if you want to give a certain name to file in bucket, include date to make name unique otherwise it will replace previous file with the same name
-        // },
-        function (err, file, apiResponse) {
-            if (!err) {
-                // console.log("api  sameer khan resp: ", apiResponse);
-
-                // https://googleapis.dev/nodejs/storage/latest/Bucket.html#getSignedUrl
-                file.getSignedUrl({
-                    action: 'read',
-                    expires: '03-09-2491'
-                }).then((urlData, err) => {
-                    if (!err) {
-                        console.log("public downloadable url: ", urlData[0]) // this is public downloadable url 
-                        // res.send(urlData[0]);
-                        userModel.findOne({ email: req.body.email }, (err, user) => {
-                            if (!err) {
-                                user.update({ profilePic: urlData[0] }, {}, function (err, data) {
-                                    res.send({
-                                        pic: user.profilePic
-                                    });
-                                })
-                            }
-                            else {
-                                res.send({
-                                    message: "error"
-                                });
-                            }
-                        })
+//     // upload file to storage bucket 
+//     // you must need to upload file in a storage bucket or somewhere safe
+//     // server folder is not safe, since most of the time when you deploy your server
+//     // on cloud it makes more t2han one instances, if you use server folder to save files
+//     // two things will happen, 
+//     // 1) your server will no more stateless
+//     // 2) providers like heroku delete all files when dyno restarts (their could be lots of reasons for your dyno to restart, or it could restart for no reason so be careful) 
 
 
-                        // // delete file from folder before sending response back to client (optional but recommended)
-                        // // optional because it is gonna delete automatically sooner or later
-                        // // recommended because you may run out of space if you dont do so, and if your files are sensitive it is simply not safe in server folder
-                        try {
-                            fs.unlinkSync(req.files[0].path)
-                            //file removed
-                            return;
-                        } catch (err) {
-                            console.error(err)
-                        }
-                        // res.send("Ok");/
-                    }
-                })
-            } else {
-                console.log("err: ", err)
-                res.status(500).send();
-            }
-        });
-})
+//     // https://googleapis.dev/nodejs/storage/latest/Bucket.html#upload-examples
+//     bucket.upload(
+//         req.files[0].path,
+//         // {
+//         //     destination: `${new Date().getTime()}-new-image.png`, // give destination name if you want to give a certain name to file in bucket, include date to make name unique otherwise it will replace previous file with the same name
+//         // },
+//         function (err, file, apiResponse) {
+//             if (!err) {
+//                 // console.log("api  sameer khan resp: ", apiResponse);
+
+//                 // https://googleapis.dev/nodejs/storage/latest/Bucket.html#getSignedUrl
+//                 file.getSignedUrl({
+//                     action: 'read',
+//                     expires: '03-09-2491'
+//                 }).then((urlData, err) => {
+//                     if (!err) {
+//                         console.log("public downloadable url: ", urlData[0]) // this is public downloadable url 
+//                         // res.send(urlData[0]);
+//                         userModel.findOne({ email: req.body.email }, (err, user) => {
+//                             if (!err) {
+//                                 user.update({ profilePic: urlData[0] }, {}, function (err, data) {
+//                                     res.send({
+//                                         pic: user.profilePic
+//                                     });
+//                                 })
+//                             }
+//                             else {
+//                                 res.send({
+//                                     message: "error"
+//                                 });
+//                             }
+//                         })
+
+
+//                         // // delete file from folder before sending response back to client (optional but recommended)
+//                         // // optional because it is gonna delete automatically sooner or later
+//                         // // recommended because you may run out of space if you dont do so, and if your files are sensitive it is simply not safe in server folder
+//                         try {
+//                             fs.unlinkSync(req.files[0].path)
+//                             //file removed
+//                             return;
+//                         } catch (err) {
+//                             console.error(err)
+//                         }
+//                         // res.send("Ok");/
+//                     }
+//                 })
+//             } else {
+//                 console.log("err: ", err)
+//                 res.status(500).send();
+//             }
+//         });
+// })
 server.listen(PORT, () => {
     console.log("Server is Running:", PORT);
 });

@@ -1,6 +1,6 @@
 
-var url = "https://twitterprofile.herokuapp.com";
-// var url = "http://localhost:5000";
+// var url = "https://twitterprofile.herokuapp.com";
+var url = "http://localhost:5000";
 var socket = io(url);
 
 socket.on('connect', function () {
@@ -141,6 +141,7 @@ function tweetpost() {
         console.log(response.data.data.username);
         document.getElementById('mytweet').innerHTML += `
         <div>
+        <img src="${response.data.data.profilePic}" id="show_pic"  />
         <h4>${response.data.data.username}</h4>
         <p>${response.data.data.tweet}</p>
         </div>

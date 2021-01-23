@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Twitter </title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="./fav.ico" type="image/gif" sizes="16x16">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/socket.io.js"></script>
+    <style>
+        ol {
+            display: flex;
+            flex-direction: column-reverse;
+            list-style: none;
+        }
+
+        li {
+            flex: 0 0 auto;
+        }
+
+        .file-upload {
+            height: 170px;
+            width: 170px;
+            margin: 40px auto;
+            border: 1px solid #f0c0d0;
+            border-radius: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .file-upload input {
+            position: absolute;
+            height: 400px;
+            width: 400px;
+            left: -200px;
+            top: -200px;
+            background: transparent;
+            opacity: 0;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+            filter: alpha(opacity=0);
+        }
+
+        .file-upload img {
+            height: 170px;
+            width: 170px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h3 style="text-align: center;">Twitter</h3>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-3">
+                    <form onsubmit="return upload()">
+                        <!-- dont get confused with return keyword inside onsubmit, 
+                it is there to prevent html page to reload/default behaviour,
+                and this have nothing to do with actual file upload process 
+                but if you remove it page will reload on submit -->
+                        <div class="file-upload">
+                            <!--place upload image/icon first !-->
+                            <img src="./../uploads/grey-photo-placeholder.jpg" id="show_pic" />
+                            <!--place input file last !-->
+                            <input type="file" onchange="previewFile()" id="fileInput" required />
+                            <br>
+
+                        </div>
+                        <center> <button type="submit" class="btn btn-outline-success"> Upload </button></center>
+                </div>
+                <div class="col-5">
+                    <h2 class="text-capitalize; display-3;"
+                        style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; margin-top: 70px;">
+                        Name :<span id="txt_name"></span></h2>
+                    <h2 class="text-capitalize; display-3;"
+                        style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Email
+                        :<span id="txt_email"></span></h2>
+                </div>
+                <div class="col-4">
+                    <center><button type="button" onclick="logout()" style="margin-top:100px;"
+                            class="btn btn-outline-success">LOG OUT</button></center>
+
+                </div>
+            </div>
+
+
+
+        </div>
+    </header>
+    <section>
+        <div class="container-fluid">
+            <div class="row" style="border: 1px solid black;">
+                <div class="col-3" style="border: 1px solid blue;">
+                    <br>
+                   <center><button type="button" class="btn btn-outline-success">Home</button>
+                    <br>
+                    <br>
+                    <br>
+                    <button type="button" class="btn btn-outline-success">Profile</button></center>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>
