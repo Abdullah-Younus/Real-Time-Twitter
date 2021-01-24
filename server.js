@@ -143,8 +143,8 @@ app.get("/profile", (req, res, next) => {
     });
 })
 
-app.post("/tweet", (req, res, next) => {
-    console.log("is token ma check karna han kia han", req.body.jToken.profilePic);
+app.post("/tweet",upload.any(), (req, res, next) => {
+    console.log("is body ma check karna han kia han", req.body);
     if (!req.body.jToken.id || !req.body.tweet) {
         res.send({
             status: 401,

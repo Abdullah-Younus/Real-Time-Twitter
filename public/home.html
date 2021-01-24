@@ -77,7 +77,7 @@
     </script>
 </head>
 
-<body>
+<body onload="getProfile(); gettweet();">
     <header>
         <h3 style="text-align: center;">Twitter</h3>
         <div class="container-fluid">
@@ -105,10 +105,21 @@
                     <h2 class="text-capitalize; display-3;"
                         style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Email
                         :<span id="txt_email"></span></h2>
+                    <form onsubmit="return tweetpost()">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Write Tweet"
+                                aria-label="Recipient's username" aria-describedby="button-addon2" id="tweet"
+                                style="margin-top:75px;">
+                            <input type="submit" hidden>
+                        </div>
+                    </form>
                 </div>
                 <div class="col-4">
                     <center><button type="button" onclick="logout()" style="margin-top:100px;"
-                            class="btn btn-outline-success">LOG OUT</button></center>
+                            class="btn btn-outline-success">LOG OUT</button>
+                    </center>
+                    <center><input type="submit" class=" btn btn-outline-success" style="margin-top:100px;" value="POST"
+                            onclick="return tweetpost()"></input></center>
 
                 </div>
             </div>
@@ -135,11 +146,11 @@
                         <ol>
                             <li>Home</li>
                         </ol>
-                        
+
                     </div>
                     <div id="profile_div" class="role" name="profile" style="display:none;">
                         <!--Your PRofile script here-->
-                        <ol> 
+                        <ol>
                             <li>PROFILE</li>
                         </ol>
                     </div>
