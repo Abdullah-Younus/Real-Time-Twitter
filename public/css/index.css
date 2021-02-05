@@ -26,3 +26,17 @@ body{
 #home{
     margin-top: 10px;
 }
+.contnnorform{
+    width: 50%;
+    margin: 0 auto;
+   
+   
+}
+.input{
+    float: left;
+    width: 80%;
+    margin: 10px;
+}
+.form-btn{
+    margin: 10px;
+}

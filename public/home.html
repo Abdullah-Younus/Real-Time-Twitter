@@ -78,7 +78,7 @@
     </script>
 </head>
 
-<body onload="getProfile(); gettweet();">
+<body onload="getProfile(); getTweets(); myTweets()">
     <section>
         <div class="hearder-section">
             <div class="container-fluid">
@@ -87,16 +87,16 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3 profilepicss">
-                        <form onsubmit="return upload()">
+                        <form>
                             <!-- dont get confused with return keyword inside onsubmit, 
                             it is there to prevent html page to reload/default behaviour,
                 and this have nothing to do with actual file upload process 
                 but if you remove it page will reload on submit -->
                             <div class="file-upload">
                                 <!--place upload image/icon first !-->
-                                <img src="./../uploads/grey-photo-placeholder.jpg" id="show_pic" />
+                                <img src="./../uploads/grey-photo-placeholder.jpg" id="profilePic" />
                                 <!--place input file last !-->
-                                <input type="file" onchange="previewFile()" id="fileInput" required />
+                                <input type="file" onchange="upload();previewFile()" id="fileInput" required />
                                 <br>
 
                             </div>
@@ -134,6 +134,22 @@
     <!-- Second Section main work -->
 
     <section>
+        <!-- tweet ka text form  -->
+        <div class="row form-conter">
+            <div class="contnnorform">
+                <form onsubmit="return post()">
+
+                    <br />
+
+                    <input type="text" placeholder="Write Tweet" class="form-control input" id="tweet_text">
+                    <button class="btn btn-outline-success form-btn">POST</button>
+
+
+                    <br />
+                </form>
+            </div>
+
+        </div>
         <div class="row">
             <div class="col-md-3" style="border: 1px solid black;">
                 <div class="btns-home-profile">
@@ -149,16 +165,18 @@
                 <div class="row justify-content-md-center">
                     <div id="home_div" class="role" name="home">
                         <!--Your Home script here-->
-                        <ol>
-                            <li>Home</li>
-                        </ol>
+                        <h1>Home</h1>
+                        <div id="posts">
+
+                        </div>
 
                     </div>
                     <div id="profile_div" class="role" name="profile" style="display:none;">
                         <!--Your PRofile script here-->
-                        <ol>
-                            <li>PROFILE</li>
-                        </ol>
+                        <h1>Profile</h1>
+                        <div id="userPosts">
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -307,6 +325,7 @@
         </div>
     </section> -->
 
+    <script src="js/app.js"></script>
 
 </body>
 

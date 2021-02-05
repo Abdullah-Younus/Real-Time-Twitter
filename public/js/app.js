@@ -11,7 +11,7 @@ function signup() {
 
     axios({
         method: 'post',
-        url: url + '/signup',
+        url: url + '/auth/signup',
         data: {
             name: document.getElementById("txt_name").value,
             email: document.getElementById("txt_email").value,
@@ -36,7 +36,7 @@ function signup() {
 function login() {
     axios({
         method: 'post',
-        url: url + "/login",
+        url: url + "/auth/login",
         data: {
             email: document.getElementById("txt_email").value,
             password: document.getElementById("txt_password").value,
@@ -64,12 +64,21 @@ function getProfile() {
         url: url + '/profile',
         credentials: 'include',
     }).then((response) => {
-        console.log(response);
-        document.getElementById('name').innerHTML = response.data.profile.name
-        document.getElementById('email').innerHTML = response.data.profile.email
-        document.getElementById("show_pic").src = response.data.profile.profilePic
+        let src = response.data.profile.profilePic
+        let name = response.data.profile.name;
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+        document.getElementById('name').innerHTML = name
+        if (src) {
+            document.getElementById('profilePic').style.backgroundImage = `url(${src})`;
+            document.getElementById('createPostImg').src = src;
+        }
+        else {
+            document.getElementById('createPostImg').style.backgroundImage = `url(${'./fallback.png'})`;
+            document.getElementById('profilePic').src = './fallback.png';
+        }
+        sessionStorage.setItem('email', response.data.profile.email)
     }, (error) => {
-        console.log(error.message);
+        location.href = "./login.html"
     });
     return false
 }
