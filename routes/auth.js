@@ -8,6 +8,7 @@ var emailApi = process.env.EMAIL_API;
 var api = express.Router();
 
 
+
 api.post('/signup', (req, res, next) => {
 
     if (!req.body.name || !req.body.email || !req.body.password || !req.body.phone || !req.body.gender) {
@@ -62,9 +63,66 @@ api.post('/signup', (req, res, next) => {
 });
 
 api.post("/login", (req, res, next) => {
-    if(){
-        
+    if (!req.body.email || !req.body.password) {
+        res.send({
+            message: `please send email and passwod in json body.
+            e.g:
+            {
+                "email": "kb337137@gmail.com",
+                "password": "abc",
+            }`,
+            status: 403
+        });
+        return
     }
+    userModel.findOne({ email: req.body.email }, function (err, user) {
+        if (err) {
+            res.send({
+                message: "An error occur" + JSON.stringify(err),
+                status: 500
+            });
+        }
+        else if (user) {
+            bcrypt.varifyHash(req.body.password, user.password).then(isMatched => {
+                if (isMatched) {
+                    console.log("Matched");
+
+                    var token = jwt.sign({
+                        id: user._id,
+                        name: user.name,
+                        email: user.email,
+                        phone: user.phone,
+                        gender: user.gender
+                    }, SERVER_SECRET);
+
+                    res.cookie('jToken', token, {
+                        maxAge: 86_400_000,
+                        httpOnly: true
+                    });
+
+                    // when making request from frontend:
+                    // var xhr = new XMLHttpRequest();
+                    // xhr.open('GET', 'http://example.com/', true);
+                    // xhr.withCredentials = true;
+                    // xhr.send(null);
+
+                    res.send({
+                        message: "Login Success",
+                        status: 200,
+                        user: {
+                            name: user.name,
+                            email: user.email,
+                            phone: user.phone,
+                            gender: user.gender
+                        }
+                    });
+                } else {
+                    console.log("Password Not Match");
+                    res.send()
+                }
+            });
+        }
+    })
 })
 
 
