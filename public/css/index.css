@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body{
+    width: 100%;
+    font-family: 'Times New Roman', serif;
+}
+.hearder-section{
+    width: 100%;
+}
+.profilepicss{
+    border: 1px solid black;
+
+}
+.name-email{
+    width: 100%;
+}
+.logout-btn{
+    text-align: center;
+}
+.btns-home-profile{
+    width: 100%;
+    line-height: 30px;
+}
+#home{
+    margin-top: 10px;
+}

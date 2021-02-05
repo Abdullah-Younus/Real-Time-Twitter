@@ -4,48 +4,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title> Twitter </title>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="./fav.ico" type="image/gif" sizes="16x16">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/socket.io.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <style>
+        ol {
+            display: flex;
+            flex-direction: column-reverse;
+            list-style: none;
+        }
+
+        li {
+            flex: 0 0 auto;
+        }
+
+        .file-upload {
+            height: 170px;
+            width: 170px;
+            margin: 40px auto;
+            border: 1px solid #f0c0d0;
+            border-radius: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .file-upload input {
+            position: absolute;
+            height: 400px;
+            width: 400px;
+            left: -200px;
+            top: -200px;
+            background: transparent;
+            opacity: 0;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+            filter: alpha(opacity=0);
+        }
+
+        .file-upload img {
+            height: 170px;
+            width: 170px;
+
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".showHideDiv").click(function () {
+                var clickedBtnId = $(this).attr('id');
+                if (clickedBtnId === 'home') {
+                    $('#home_div').show();
+                    $('#profile_div').hide();
+                } else if (clickedBtnId === 'profile') {
+                    $('#home_div').hide();
+                    $('#profile_div').show();
+                }
+            });
+        });
+    </script>
 </head>
 
 <body>
-    <button type="button" onclick='document.getElementById("education").style.display = "block"'>Click Me!</button>
-    <button data-switch="#education" onclick='document.getElementById("education").style.display = "none"'>Click to show my education</button>
-    <button data-switch="#about_name_bravitus">Click to read about the name Bravitus</button>
 
-    <div id="page-2">
+    <header>
+        <h3 style="text-align: center;">Twitter</h3>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-3">
+                    <form onsubmit="return upload()">
+                        <!-- dont get confused with return keyword inside onsubmit, 
+                        it is there to prevent html page to reload/default behaviour,
+            and this have nothing to do with actual file upload process 
+            but if you remove it page will reload on submit -->
+                        <div class="file-upload">
+                            <!--place upload image/icon first !-->
+                            <img src="./../uploads/grey-photo-placeholder.jpg" id="show_pic" />
+                            <!--place input file last !-->
+                            <input type="file" onchange="previewFile()" id="fileInput" required />
+                            <br>
 
-        <div id="about_me" class="container">
-            <h1>This is about me section</h1>
+                        </div>
+                        <center> <button type="submit" class="btn btn-outline-success"> Upload </button></center>
+                    </form>    
+                </div>
+                <div class="col-5">
+                    <h2 class="text-capitalize; display-3;"
+                        style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; margin-top: 70px;">
+                        Name :<span id="txt_name"></span></h2>
+                    <h2 class="text-capitalize; display-3;"
+                        style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Email
+                        :<span id="txt_email"></span></h2>
+                    <form onsubmit="return tweetpost()">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Write Tweet"
+                                aria-label="Recipient's username" aria-describedby="button-addon2" id="tweet"
+                                style="margin-top:75px;">
+                            <input type="submit" hidden>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-4">
+                    <center><button type="button" onclick="logout()" style="margin-top:100px;"
+                            class="btn btn-outline-success">LOG OUT</button>
+                    </center>
+                    <center><input type="submit" class=" btn btn-outline-success" style="margin-top:100px;" value="POST"
+                            onclick="return tweetpost()"></input></center>
 
-            <div>about me about me about me</div>
+                </div>
+            </div>
+
+
+
         </div>
+    </header>
+    <section>
+        <div class="container-fluid">
+            <div class="row" style="border: 1px solid black;">
+                <div class="col-3" style="border: 1px solid blue;" class="btnsContainer">
+                    <br>
+                    <center><button class="showHideDiv btn btn-outline-success" id="home">Home</button>
+                        <br>
+                        <br>
+                        <br>
+                        <button class="showHideDiv btn btn-outline-success" id="profile">Profile</button>
+                    </center>
+                </div>
+                <div class="col-9" style="border: 2px solid springgreen;display: inline;">
+                    <div id="home_div" class="role" name="home">
+                        <!--Your Home script here-->
+                        <ol>
+                            <li>Home</li>
+                        </ol>
 
-        <!-- Hidden blocks that you show when the appropriate button is clicked. -->
-        <div id="education" class="container" style="display: none;">
-            <h1>This is about my education</h1>
-
-            <div>education education education</div>
+                    </div>
+                    <div id="profile_div" class="role" name="profile" style="display:none;">
+                        <!--Your PRofile script here-->
+                        <ol>
+                            <li>PROFILE</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div id="about_name_bravitus" class="container" style="display: none;">
-            <h1>This is about the name bravitus</h1>
-
-            <div>bravitus bravitus bravitus</div>
-        </div>
-        <script>
-            // Listening to a button click.
-            $('[data-switch]').on('click', function (e) {
-                var $page = $('#page-2'),
-                    blockToShow = e.currentTarget.getAttribute('data-switch');
-
-                // Hide all children.
-                $page.children().hide();
-
-                // And show the requested component.
-                $page.children(blockToShow).show();
-            });
-        </script>
+    </section>
 </body>
 
 </html>

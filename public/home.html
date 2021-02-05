@@ -21,6 +21,7 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="js/socket.io.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
     <style>
         ol {
             display: flex;
@@ -35,7 +36,7 @@
         .file-upload {
             height: 170px;
             width: 170px;
-            margin: 40px auto;
+            margin: 10px auto;
             border: 1px solid #f0c0d0;
             border-radius: 100px;
             overflow: hidden;
@@ -78,7 +79,154 @@
 </head>
 
 <body onload="getProfile(); gettweet();">
-    <header>
+    <section>
+        <div class="hearder-section">
+            <div class="container-fluid">
+                <div class="row justify-content-md-center">
+                    <h1>Twitter</h1>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 profilepicss">
+                        <form onsubmit="return upload()">
+                            <!-- dont get confused with return keyword inside onsubmit, 
+                            it is there to prevent html page to reload/default behaviour,
+                and this have nothing to do with actual file upload process 
+                but if you remove it page will reload on submit -->
+                            <div class="file-upload">
+                                <!--place upload image/icon first !-->
+                                <img src="./../uploads/grey-photo-placeholder.jpg" id="show_pic" />
+                                <!--place input file last !-->
+                                <input type="file" onchange="previewFile()" id="fileInput" required />
+                                <br>
+
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="col-md-5" style="border: 1px solid black;">
+                        <div class="name-email">
+
+                            <br />
+                            <h2>Name :<span id="name"></span></h2>
+                            <h2>Email :<span id="email"></span></h2>
+
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 logout-btn" style="border: 1px solid black;">
+
+
+                        <br />
+                        <button type="button" onclick="logout()" class="btn btn-outline-success">LOG OUT</button>
+
+
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Second Section main work -->
+
+    <section>
+        <div class="row">
+            <div class="col-md-3" style="border: 1px solid black;">
+                <div class="btns-home-profile">
+                    <center><button class="showHideDiv btn btn-outline-success" id="home">Home</button>
+                        <br>
+                        <br>
+
+                        <button class="showHideDiv btn btn-outline-success" id="profile">Profile</button>
+                    </center>
+                </div>
+            </div>
+            <div class="col-md-9" style="border: 1px solid black;">
+                <div class="row justify-content-md-center">
+                    <div id="home_div" class="role" name="home">
+                        <!--Your Home script here-->
+                        <ol>
+                            <li>Home</li>
+                        </ol>
+
+                    </div>
+                    <div id="profile_div" class="role" name="profile" style="display:none;">
+                        <!--Your PRofile script here-->
+                        <ol>
+                            <li>PROFILE</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <header>
         <h3 style="text-align: center;">Twitter</h3>
         <div class="container-fluid">
             <div class="row">
@@ -88,11 +236,11 @@
                 it is there to prevent html page to reload/default behaviour,
                 and this have nothing to do with actual file upload process 
                 but if you remove it page will reload on submit -->
-                        <div class="file-upload">
+    <!-- <!-- <div class="file-upload">
                             <!--place upload image/icon first !-->
-                            <img src="./../uploads/grey-photo-placeholder.jpg" id="show_pic" />
+    <!-- <img src="./../uploads/grey-photo-placeholder.jpg" id="show_pic" />
                             <!--place input file last !-->
-                            <input type="file" onchange="previewFile()" id="fileInput" required />
+    <!-- <input type="file" onchange="previewFile()" id="fileInput" required />
                             <br>
 
                         </div>
@@ -127,8 +275,8 @@
 
 
         </div>
-    </header>
-    <section>
+    </header> -->
+    <!-- <section> 
         <div class="container-fluid">
             <div class="row" style="border: 1px solid black;">
                 <div class="col-3" style="border: 1px solid blue;" class="btnsContainer">
@@ -143,21 +291,21 @@
                 <div class="col-9" style="border: 2px solid springgreen;display: inline;">
                     <div id="home_div" class="role" name="home">
                         <!--Your Home script here-->
-                        <ol>
+    <!-- <ol>
                             <li>Home</li>
                         </ol>
 
                     </div>
                     <div id="profile_div" class="role" name="profile" style="display:none;">
-                        <!--Your PRofile script here-->
-                        <ol>
+                        Your PRofile script here-->
+    <!-- <ol>
                             <li>PROFILE</li>
                         </ol>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
 
 </body>
