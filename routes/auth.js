@@ -87,7 +87,6 @@ api.post("/login", (req, res, next) => {
             bcrypt.varifyHash(req.body.password, user.password).then(isMatched => {
                 if (isMatched) {
                     console.log("Matched");
-
                     var token = jwt.sign({
                         id: user._id,
                         name: user.name,
@@ -282,4 +281,4 @@ api.post('/forgetpassword2', (req, res, next) => {
 function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
 }
-module.exports = api
+module.exports = api;
