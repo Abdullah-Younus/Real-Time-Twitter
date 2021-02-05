@@ -118,12 +118,22 @@ api.post("/login", (req, res, next) => {
                     });
                 } else {
                     console.log("Password Not Match");
-                    res.send()
+                    res.send({
+                        message: "Password Incorrect",
+                        status: 500
+                    });
                 }
+            }).catch(e => {
+                console.log("error :", e);
+            });
+        } else {
+            res.send({
+                message: "User Not Found",
+                status: 403
             });
         }
-    })
-})
+    });
+});
 
 
 
