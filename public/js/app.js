@@ -47,7 +47,7 @@ function login() {
             sessionStorage.setItem("email", document.getElementById("txt_email").value)
             console.log(response.data.message);
             alert(response.data.message);
-            window.location.href = "./../tweet.html"
+            window.location.href = "./../home.html"
             return
         } else {
             alert(response.data.message)
@@ -73,12 +73,12 @@ function getProfile() {
             document.getElementById('createPostImg').src = src;
         }
         else {
-            document.getElementById('createPostImg').style.backgroundImage = `url(${'./fallback.png'})`;
-            document.getElementById('profilePic').src = './fallback.png';
+            document.getElementById('createPostImg').style.backgroundImage = `url(${'./../images/fallback.jpg'})`;
+            document.getElementById('profilePic').src = './../images/fallback.jpg';
         }
         sessionStorage.setItem('email', response.data.profile.email)
     }, (error) => {
-        location.href = "./login.html"
+        location.href = "../login.html"
     });
     return false
 }

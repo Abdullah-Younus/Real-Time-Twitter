@@ -117,7 +117,7 @@ app.get("/profile", (req, res, next) => {
     userModel.findById(req.body.jToken.id, 'name email phone gender createdOn profilePic', function (err, doc) {
         if (!err) {
             res.send({
-                message: doc,
+                profile: doc,
                 status: 200
             });
         } else {
