@@ -34,25 +34,14 @@ var upload = multer({ storage: storage })
 
 
 // // // https://firebase.google.com/docs/storage/admin/start
-var serviceAccount = {
-    "type": "service_account",
-    "project_id": "tweetapp-23ff3",
-    "private_key_id": "9c4e62c141bad664c2d64aae090eaa53d941c7ef",
-    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQCkMXWPsirsKVId\nZO1o1zm5lymSIlEf6FD8Yf9pDJxlN21LE5TwxRdyPJkvBTSva9immF7PZw6go7/y\njkogFlIW0jgLXYwD0c0viwtT8Ob1VnsBuo/9LjQgEtCucN+CW24QDsxip1hPtqWg\nzkg22jXZ83cU+9hUqHDF0McpM7Bc2eIeyoSJ6LWVvrCuvTaJ2uPaCeKTwcJ2U5eW\nw3hct1a9PgUtvC3aBoVymXDhaeGqTvOt0wjpYdKGJNzuXiV2vG/LGFiwCPVSwalu\nWDinNkAqNJfQio+acrcJrImsi518hBSdZ8i1Mz3fSjgA38FJXgU/bjG4gLKm+b1v\nkpDP2/vzAgMBAAECgf830qvsoLmFWGEqWto2pOL7UrVBRavwXJn8wuLj3cSQyvIR\nw8X8AvNLEvBqAp11LJ2+ZQX85gNodEPXwbgcmPVizOaf2iS22+ADU3uP8fim7BVq\nzOaZQHGB3l8BrXFslJ+6dxSnM4BhFOdgzimsMKoeZjZPN+hU4AwiBbzzAsXD555J\n06rbhHjCU3paNUouPWSCaKUpCsc6jVIYplByTlryKkleRapsSyxa1LC8zV/I5znG\nq8uEhB21x6owJqUgZOBBqYPlaLyfE9Ulfzna98+85q6vyNR0zOZiyCslmzCi+IKh\nqXOL5JUTUDeoXhaqpYtMc5IL7/NL/VZJBZoEAcECgYEA3OA+rhCYEyOCObgVDdxi\n1X2pulqV6eVRd0d7J0NLL0dENZnu3xOUciUSettJL4TGHh/YI89x/m5CeAafXrzI\nrUfQ6gXpG5sjh7j6d3M8NPsqTLczu8WwnkoQD+4ZX/2bgUxhYkT4iD22XYnnS0u4\nP3VTIU95vTy0Aha4Gh6Y77ECgYEAvk2vsuimDXrIg1j4FMwMKENAOE5abvkpCNVc\ndfazAEPcCnfLyqknAe03Mh5/JFP/N49fgaHYgRKGjDdf8q7Vr5r4JQQAW7J/0b6H\nJO7Gu/sNMmJ6dJD/eCxk0ANNhK3ukhcADlmJ2qdUyhm+Yby85qGYLlGjLpJRz6wd\nP1n1EuMCgYEAtncZ0Losp0LiRcRowDab/zn8iNJkngCvOBZ5CopxBfGdy5oK14ZZ\nT6KIja2x2+uXrzMnXw30Yfe8OWNfLOhP77YwQ+P2GrQiufB6GUu9JReIbi+6MRiz\nO1B7zG0p0T60xC/RE1le503z5XoS9QTshJ/ruMzrCQWov0D9fbZhKUECgYA9BP/v\nZ/XGoLYml6KEWKEVT+sJouYQa0gjEvbgxEfFL/0gRiVMSEy/q2ZlZa3y4hQVpp1D\nHbgkOuJ1l1PmpvTRp+klRVEwFd4yTNtclkuW/vrOSxFkyxF/YQy6PjTe9D5pDYLx\nFvjC6aCgZPzMrg4MDYiUYYznY/djlZaTN68DbQKBgEGtApLgXYoNxWxK7ol/ezqE\nQ9oFZbGL2ZtWSJxf/ZC9bUz1n46rpqg/3dN2Ac67/ZQZn9rg00FlqioDnsAl5j4l\nuc5/z8+roUJfqtgQDlFD6F2zRnHexci2a4oBJOYK9a4SDU/Gn6HUdqicxea2NvRC\nI9/l6Gb5bJwVhQce5lwC\n-----END PRIVATE KEY-----\n",
-    "client_email": "firebase-adminsdk-t7ycv@tweetapp-23ff3.iam.gserviceaccount.com",
-    "client_id": "110481195485338439268",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-t7ycv%40tweetapp-23ff3.iam.gserviceaccount.com"
-}
+var serviceAccount = JSON.parse(process.env.SERVICEACCOUNT)
 
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://tweetapp-23ff3-default-rtdb.firebaseio.com"
+    databaseURL: process.env.DATABASEURL
 });
-const bucket = admin.storage().bucket("gs://tweetapp-23ff3.appspot.com");
+const bucket = admin.storage().bucket(process.env.BUCKET);
 app.use(bodyParser.json());
 app.use(cookieParser());
 
