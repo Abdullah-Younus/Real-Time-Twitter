@@ -78,7 +78,7 @@
     </script>
 </head>
 
-<bodys>
+<body onload="gettweet();getProfile();">
     <section>
         <div class="hearder-section">
             <div class="container-fluid">
@@ -137,7 +137,7 @@
         <!-- tweet ka text form  -->
         <div class="row form-conter">
             <div class="contnnorform">
-                <form onsubmit="return post()">
+                <form onsubmit="return tweetpost()">
 
                     <br />
 
@@ -174,7 +174,7 @@
                     <div id="profile_div" class="role" name="profile" style="display:none;">
                         <!--Your PRofile script here-->
                         <h1>Profile</h1>
-                        <div id="userPosts">
+                        <div id="mytweet">
 
                         </div>
                     </div>

@@ -4,8 +4,8 @@ var jwt = require('jsonwebtoken');// https://github.com/auth0/node-jsonwebtoken
 var { userModel, otpModel } = require('../dbrepo/dbmodel');
 var { SERVER_SECRET } = require("../core/index");
 var postmark = require("postmark");
-var emailApi = process.env.EMAIL_API;
-var client = new postmark.ServerClient(emailApi);
+// var emailApi = process.env.EMAIL_API;
+// var client = new postmark.ServerClient(emailApi);
 var api = express.Router();
 
 
@@ -33,6 +33,7 @@ api.post('/signup', (req, res, next) => {
                     "password": ishashPassword,
                     "phone": req.body.phone,
                     "gender": req.body.gender
+                    
                 })
                 newUser.save((err, data) => {
                     if (err) {

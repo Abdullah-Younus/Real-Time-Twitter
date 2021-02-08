@@ -66,19 +66,21 @@ function getProfile() {
     }).then((response) => {
         let src = response.data.profile.profilePic
         let name = response.data.profile.name;
+        let email = response.data.profile.email;
+
         name = name.charAt(0).toUpperCase() + name.slice(1);
         document.getElementById('name').innerHTML = name
         if (src) {
             document.getElementById('profilePic').style.backgroundImage = `url(${src})`;
-            document.getElementById('createPostImg').src = src;
+
         }
         else {
-            document.getElementById('createPostImg').style.backgroundImage = `url(${'./../images/fallback.jpg'})`;
             document.getElementById('profilePic').src = './../images/fallback.jpg';
         }
         sessionStorage.setItem('email', response.data.profile.email)
-    }, (error) => {
-        location.href = "../login.html"
+        sessionStorage.setItem('name', response.data.profile.name)
+    }).catch((error) => {
+        window.location.href = "./../login.html"
     });
     return false
 }
@@ -140,19 +142,20 @@ function upload() {
 function tweetpost() {
     axios({
         method: 'post',
-        url: url + "/tweet",
+        url: url + "/textTweet",
         data: {
-            tweet: document.getElementById("tweet").value,
+            tweet: document.getElementById("tweet_text").value,
         },
         withCredentials: true
     }).then((response) => {
 
+        document.getElementById('tweet_text').value = "";
         console.log(response.data.data.username);
         document.getElementById('mytweet').innerHTML += `
         <div>
-        <img src="${response.data.data.profilePic}" id="show_pic"  />
+        <img src="${response.data.data.profilePic}" />
         <h4>${response.data.data.username}</h4>
-        <p>${response.data.data.tweet}</p>
+        <p>${response.data.data.tweets}</p>
         </div>
         
         `
@@ -160,7 +163,6 @@ function tweetpost() {
     }, (error) => {
         console.log(error);
     });
-    document.getElementById('tweet').value = "";
     return false;
 }
 
@@ -170,27 +172,33 @@ function gettweet() {
         url: url + '/tweet-get',
         credentials: 'include',
     }).then((response) => {
+        console.log("check res", response.data)
         let tweets = response.data;
+
         let html = ""
-        tweets.forEach(element => {
+        response.data.data.forEach(element => {
             html += `
             <div>
             <h4>${element.username}</h4>
-            <p>${element.tweet}</p>
+            <p>${element.tweets}</p>
+            <img src="${element.profilePic}"/>
             </div>
             `
         });
-        document.getElementById('getall').innerHTML = html;
+        document.getElementById('posts').innerHTML = html;
 
-        let userTweet = response.data
+        let userTweet = response.data.data
         let userHtml = ""
 
         userTweet.forEach(element => {
-            if (element.username == response.data.username) {
+            if (element.username == sessionStorage.getItem('name')
+            ) {
                 userHtml += `
                 <div>
-                <h4>${element.usernmae}</h4>
-                <p>${element.tweet}</p>
+                <h4>${element.username}</h4>
+                <p>${element.tweets}</p>
+                <img src="${element.profilePic}"/>
+
                 </div>
                 `
             }
@@ -207,10 +215,12 @@ function gettweet() {
 socket.on('NEW_POST', (newPost) => {
     console.log(newPost)
     let tweets = newPost;
-    document.getElementById('getall').innerHTML += `
+    document.getElementById('posts').innerHTML += `
     <div>
     <h4>${tweets.username}</h4>
-    <p>${tweets.tweet}</p>
+    <p>${tweets.tweets}</p>
+    <img src="${tweets.profilePic}"/>
+
     </div>
     `
 })
@@ -289,7 +299,7 @@ function ChangePassowd() {
 function logout() {
     axios({
         method: 'post',
-        url: url + '/logout',
+        url: url + '/auth/logout',
         credentials: 'include',
     }).then((response) => {
         console.log(response);
